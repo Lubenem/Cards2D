@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
 using System.Collections;
+using System.Collections.Generic;
 
 public class Card : MonoBehaviour
 {
@@ -9,17 +10,19 @@ public class Card : MonoBehaviour
     private bool _inputBlock;
 
     [SerializeField] private float _moveDur = 1f;
+    [SerializeField] private List<Sprite> _cardImages;
 
-    public int childIndex;
+    public int type;
 
     private void Awake()
     {
         _image = GetComponent<Image>();
     }
 
-    public void SetCardImg(Sprite sprite)
+    public void SetCardType(int cardType)
     {
-        _image.sprite = sprite;
+        type = cardType;
+        _image.sprite = _cardImages[cardType];
     }
 
     public void PointerDown()
