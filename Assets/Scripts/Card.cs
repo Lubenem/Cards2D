@@ -11,6 +11,7 @@ public class Card : MonoBehaviour
 
     [SerializeField] private float _moveDur = 1f;
     [SerializeField] private List<Sprite> _cardImages;
+    [SerializeField] private Color _inputBlockColor = Color.gray;
 
     public int type;
 
@@ -25,18 +26,30 @@ public class Card : MonoBehaviour
         _image.sprite = _cardImages[cardType];
     }
 
+    public void UpdateInputBlock(bool forceInputBlock = false)
+    {
+        if (!forceInputBlock)
+            _inputBlock = !(type == CardManager.instance.currCardType);
+        else
+            _inputBlock = true;
+
+        _image.color = _inputBlock ? _inputBlockColor : Color.white;
+    }
+
     public void PointerDown()
     {
         if (_inputBlock || GameManager.instance.globalInputBlock)
             return;
 
         transform.SetParent(CardManager.instance.cardHolder.parent);
+        CardManager.instance.SetInputBlock();
         MoveToCenter();
     }
 
     private void MoveToCenter()
     {
         _inputBlock = true;
+        _image.color = Color.white;
         transform.DOMove(CardManager.instance.centerCard.transform.position, _moveDur).OnComplete(() =>
         {
             StartCoroutine(RemoveCard());
@@ -45,7 +58,10 @@ public class Card : MonoBehaviour
 
     private IEnumerator RemoveCard()
     {
-        yield return new WaitForSeconds(2f);
-        gameObject.SetActive(false);
+        yield return new WaitForSeconds(1f);
+        CardManager.instance.cards.Remove(this);
+        Destroy(gameObject);
+        CardManager.instance.UpdateCurrCardType();
+        CardManager.instance.UpdateCounter();
     }
 }
