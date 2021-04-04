@@ -13,12 +13,14 @@ public class Card : MonoBehaviour
     [SerializeField] private float _moveDur = 1f;
     [SerializeField] private List<Sprite> _cardImages;
     [SerializeField] private Color _inputBlockColor = Color.gray;
+    [SerializeField] private AudioClip _cardMoveSound;
 
     public int type;
 
     private void Awake()
     {
         _image = GetComponent<Image>();
+        _cardManager = GetComponentInParent<CardManager>();
     }
 
     public void SetCardType(int cardType)
@@ -42,13 +44,14 @@ public class Card : MonoBehaviour
         if (_inputBlock || GameManager.instance.globalInputBlock)
             return;
 
-        transform.SetParent(_cardManager.cardHolder.parent);
+        transform.SetParent(_cardManager.transform.parent);
         _cardManager.SetInputBlock();
         MoveToCenter();
     }
 
     private void MoveToCenter()
     {
+        SoundManager.instance.PlaySound(_cardMoveSound, 0.4f);
         _inputBlock = true;
         _image.color = Color.white;
         transform.DOMove(_cardManager.centerCard.transform.position, _moveDur).OnComplete(() =>

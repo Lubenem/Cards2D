@@ -95,6 +95,8 @@ MonoBehaviour:
   - {fileID: 21300000, guid: e5154422f7aeab849ac2b2f6a469b792, type: 3}
   - {fileID: 21300000, guid: 29b1d5d7f9786b744a33f1c1f6649ca3, type: 3}
   - {fileID: 21300000, guid: 16cd7c008c9f0e444aec241570149165, type: 3}
+  _inputBlockColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
+  _cardMoveSound: {fileID: 8300000, guid: 3dd5022a7e6685d43baa4f4af267f6fb, type: 3}
   type: 0
 --- !u!114 &7224404267726824394
 MonoBehaviour:

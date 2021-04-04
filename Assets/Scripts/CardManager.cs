@@ -13,9 +13,9 @@ public class CardManager : MonoBehaviour
     [SerializeField] private float _spawnWait = 0.2f;
     [SerializeField] private float _centerCardMoveDur = 0.2f;
     [SerializeField] private Text _counterText;
+    [SerializeField] private AudioClip _cardSound;
 
     public Transform centerCard;
-    public Transform cardHolder;
     public int currCardType;
     public List<Card> cards;
 
@@ -30,6 +30,7 @@ public class CardManager : MonoBehaviour
 
         for (int i = 0; i < startHand.Length; i++)
         {
+            SoundManager.instance.PlaySound(_cardSound, 0.1f);
             int cardType = startHand[i];
             SpawnCard(cardType);
             yield return new WaitForSeconds(_spawnWait);
@@ -44,11 +45,11 @@ public class CardManager : MonoBehaviour
 
     public void UpdateCurrCardType()
     {
-        if (cardHolder.childCount <= 0)
+        if (transform.childCount <= 0)
             return;
 
-        int randomIndex = UnityEngine.Random.Range(0, cardHolder.childCount);
-        currCardType = cardHolder.GetChild(randomIndex).GetComponent<Card>().type;
+        int randomIndex = UnityEngine.Random.Range(0, transform.childCount);
+        currCardType = transform.GetChild(randomIndex).GetComponent<Card>().type;
 
         foreach (Card card in cards)
             card.UpdateInputBlock();
@@ -69,10 +70,10 @@ public class CardManager : MonoBehaviour
     private void SpawnCard(int cardType)
     {
         Transform newCenterCard = Instantiate(centerCard, centerCard.parent);
-        newCenterCard.DOMove(cardHolder.position, _centerCardMoveDur).OnComplete(() =>
+        newCenterCard.DOMove(transform.position, _centerCardMoveDur).OnComplete(() =>
         {
             Destroy(newCenterCard.gameObject);
-            Card card = Instantiate(_cardPrefab, cardHolder);
+            Card card = Instantiate(_cardPrefab, transform);
             cards.Add(card);
             card.SetCardType(cardType);
         });

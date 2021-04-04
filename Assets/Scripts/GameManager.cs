@@ -1,13 +1,9 @@
-using System;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.UI;
-using System.Linq;
+using System.Collections;
 
 public class GameManager : MonoBehaviour
 {
-    [SerializeField] private Image _background;
-
     public static GameManager instance;
     public bool globalInputBlock;
 
@@ -28,7 +24,17 @@ public class GameManager : MonoBehaviour
 
     public void LoadScene(int sceneIndex)
     {
-        SceneManager.LoadSceneAsync(sceneIndex);
+        StartCoroutine(LoadAndUpdate(sceneIndex));
+    }
+
+    private IEnumerator LoadAndUpdate(int sceneIndex)
+    {
+        AsyncOperation loading = SceneManager.LoadSceneAsync(sceneIndex);
+
+        while (!loading.isDone)
+            yield return null;
+
+        UpdateBackgroundColor();
     }
 
     public void SetBackgroundColor(Color color)
@@ -47,6 +53,6 @@ public class GameManager : MonoBehaviour
         float ColorB = PlayerPrefs.GetFloat("color.b");
         float ColorA = PlayerPrefs.GetFloat("color.a");
         Color color = new Color(ColorR, ColorG, ColorB, ColorA);
-        _background.color = color;
+        Camera.main.backgroundColor = color;
     }
 }
