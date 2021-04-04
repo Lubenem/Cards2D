@@ -8,6 +8,7 @@ public class Card : MonoBehaviour
 {
     private Image _image;
     private bool _inputBlock;
+    private CardManager _cardManager;
 
     [SerializeField] private float _moveDur = 1f;
     [SerializeField] private List<Sprite> _cardImages;
@@ -29,7 +30,7 @@ public class Card : MonoBehaviour
     public void UpdateInputBlock(bool forceInputBlock = false)
     {
         if (!forceInputBlock)
-            _inputBlock = !(type == CardManager.instance.currCardType);
+            _inputBlock = !(type == _cardManager.currCardType);
         else
             _inputBlock = true;
 
@@ -41,8 +42,8 @@ public class Card : MonoBehaviour
         if (_inputBlock || GameManager.instance.globalInputBlock)
             return;
 
-        transform.SetParent(CardManager.instance.cardHolder.parent);
-        CardManager.instance.SetInputBlock();
+        transform.SetParent(_cardManager.cardHolder.parent);
+        _cardManager.SetInputBlock();
         MoveToCenter();
     }
 
@@ -50,7 +51,7 @@ public class Card : MonoBehaviour
     {
         _inputBlock = true;
         _image.color = Color.white;
-        transform.DOMove(CardManager.instance.centerCard.transform.position, _moveDur).OnComplete(() =>
+        transform.DOMove(_cardManager.centerCard.transform.position, _moveDur).OnComplete(() =>
         {
             StartCoroutine(RemoveCard());
         });
@@ -59,9 +60,9 @@ public class Card : MonoBehaviour
     private IEnumerator RemoveCard()
     {
         yield return new WaitForSeconds(1f);
-        CardManager.instance.cards.Remove(this);
+        _cardManager.cards.Remove(this);
         Destroy(gameObject);
-        CardManager.instance.UpdateCurrCardType();
-        CardManager.instance.UpdateCounter();
+        _cardManager.UpdateCurrCardType();
+        _cardManager.UpdateCounter();
     }
 }

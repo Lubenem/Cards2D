@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using UnityEngine;
 using DG.Tweening;
@@ -16,20 +15,9 @@ public class CardManager : MonoBehaviour
     [SerializeField] private Text _counterText;
 
     public Transform centerCard;
-    public static CardManager instance;
     public Transform cardHolder;
     public int currCardType;
     public List<Card> cards;
-
-    private void Awake()
-    {
-        if (instance == null)
-            instance = this;
-        else
-            Destroy(gameObject);
-
-        DontDestroyOnLoad(gameObject);
-    }
 
     private void Start()
     {

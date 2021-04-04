@@ -24,7 +24,6 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
         UpdateBackgroundColor();
-
     }
 
     public void LoadScene(int sceneIndex)
@@ -34,20 +33,19 @@ public class GameManager : MonoBehaviour
 
     public void SetBackgroundColor(Color color)
     {
-        PlayerPrefs.SetString("BackGround Color", $"{color.r},{color.g},{color.b},{color.a}");
+        PlayerPrefs.SetFloat("color.r", color.r);
+        PlayerPrefs.SetFloat("color.g", color.g);
+        PlayerPrefs.SetFloat("color.b", color.b);
+        PlayerPrefs.SetFloat("color.a", color.a);
         UpdateBackgroundColor();
     }
 
     private void UpdateBackgroundColor()
     {
-        string colorString = PlayerPrefs.GetString("BackGround Color");
-        if (colorString == String.Empty)
-            return;
-        string[] colorComponents = colorString.Split(',');
-        int ColorR = int.Parse(colorComponents[0]);
-        int ColorG = int.Parse(colorComponents[1]);
-        int ColorB = int.Parse(colorComponents[2]);
-        int ColorA = int.Parse(colorComponents[3]);
+        float ColorR = PlayerPrefs.GetFloat("color.r");
+        float ColorG = PlayerPrefs.GetFloat("color.g");
+        float ColorB = PlayerPrefs.GetFloat("color.b");
+        float ColorA = PlayerPrefs.GetFloat("color.a");
         Color color = new Color(ColorR, ColorG, ColorB, ColorA);
         _background.color = color;
     }
